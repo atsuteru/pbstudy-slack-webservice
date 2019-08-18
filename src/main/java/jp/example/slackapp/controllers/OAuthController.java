@@ -1,6 +1,7 @@
 package jp.example.slackapp.controllers;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +16,12 @@ public class OAuthController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> receiveRedirect(@QueryParam("code") String code, @QueryParam("state") String state) {
-		return Map.of("code", code, "state", state);
+		ResourceBundle res = ResourceBundle.getBundle("slack");
+		var clientId = res.getString("clientId");
+		var clientSecret = res.getString("clientSecret");
+		return Map.of(
+				"code", code, 
+				"state", state, 
+				"client_id", clientId);
 	}
 }
