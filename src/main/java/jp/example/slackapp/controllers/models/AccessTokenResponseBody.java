@@ -10,6 +10,8 @@ public class AccessTokenResponseBody {
 	
 	public String error;
 
+	public String source;
+
 	@JsonProperty("access_token")
 	public String accessToken;
 	
@@ -22,18 +24,4 @@ public class AccessTokenResponseBody {
 	
 	@JsonProperty("team_id")
 	public String teamId;
-
-	public AccessTokenResponseBody() {
-	}
-
-	public AccessTokenResponseBody(String ok, String error, String accessToken, String scope, String userId, String teamName,
-			String teamId) {
-		this.ok = ok;
-		this.error = error;
-		this.accessToken = accessToken;
-		this.scope = scope;
-		this.userId = userId;
-		this.teamName = teamName;
-		this.teamId = teamId;
-	}
 }

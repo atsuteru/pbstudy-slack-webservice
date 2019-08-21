@@ -10,6 +10,8 @@ public class PostMessageResponseBody {
 	
 	public String error;
 	
+	public String source;
+
 	public String channel;
 	
 	public String ts;

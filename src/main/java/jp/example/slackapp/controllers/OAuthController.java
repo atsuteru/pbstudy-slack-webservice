@@ -27,8 +27,25 @@ public class OAuthController {
 		ResourceBundle res = ResourceBundle.getBundle("slack");
 		var clientId = res.getString("clientId");
 		var clientSecret = res.getString("clientSecret");
+		var postChannel = res.getString("oauth.postChannel");
 		
 		// Get Access token
+		var authResponse = getAccessToken(clientId, clientSecret, code);
+
+		// POST Message
+		var postResponse = postMessage(authResponse.accessToken, postChannel, "Access token has been granted.");
+
+		return Map.of(
+				"code", code, 
+				"state", state, 
+				"client_id", clientId,
+				"auth_result", authResponse,
+				"post_result", postResponse);
+	}
+
+	protected AccessTokenResponseBody getAccessToken(String clientId, String clientSecret, String code) {
+		AccessTokenResponseBody authResponse;
+
 		String authResponseString;
 		try {
 			authResponseString = ClientBuilder.newClient()
@@ -39,71 +56,52 @@ public class OAuthController {
 					.request().accept("application/json")
 					.get(String.class);
 		} catch (Exception e) {
-			return Map.of(
-					"code", code, 
-					"state", state, 
-					"client_id", clientId,
-					"client_secret", clientSecret,
-					"auth_result_str", "ERROR:" + e.getMessage());
+			authResponse = new AccessTokenResponseBody();
+			authResponse.error = "Request Error:" + e.getMessage();
+			return authResponse;
 		}
-		AccessTokenResponseBody authResponse;
+		
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			authResponse = objectMapper.readValue(authResponseString,  AccessTokenResponseBody.class);
 		} catch (Exception e) {
-			return Map.of(
-					"code", code, 
-					"state", state, 
-					"client_id", clientId,
-					"client_secret", clientSecret,
-					"auth_result_str", authResponseString,
-					"auth_result", "ERROR:" + e.getMessage());
+			authResponse = new AccessTokenResponseBody();
+			authResponse.error = "Parse Error:" + e.getMessage();
+			authResponse.source = authResponseString;
+			return authResponse;
 		}
+		
+		return authResponse;
+	}
 
-		// POST Message
+	protected PostMessageResponseBody postMessage(String accessToken, String postChannel, String text) {
+		PostMessageResponseBody postResponse;
+		
 		String postResponseString;
 		try {
 			postResponseString = ClientBuilder.newClient()
 					.target("https://slack.com").path("/api/chat.postMessage")
-					.queryParam("token", authResponse.accessToken)
-					.queryParam("channel", "CM34B0KMZ")
+					.queryParam("token", accessToken)
+					.queryParam("channel", postChannel)
 					.queryParam("text", "Access token has been granted.")
 					.request().accept("application/json")
 					.get(String.class);
 		} catch (Exception e) {
-			return Map.of(
-					"code", code, 
-					"state", state, 
-					"client_id", clientId,
-					"client_secret", clientSecret,
-					"auth_result_str", authResponseString,
-					"auth_result", authResponse,
-					"post_restlt_str", "ERROR:" + e.getMessage());
+			postResponse = new PostMessageResponseBody();
+			postResponse.error = "Request Error:" + e.getMessage();
+			return postResponse;
 		}
-		PostMessageResponseBody postResponse;
+
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			postResponse = objectMapper.readValue(postResponseString,  PostMessageResponseBody.class);
 		} catch (Exception e) {
-			return Map.of(
-					"code", code, 
-					"state", state, 
-					"client_id", clientId,
-					"client_secret", clientSecret,
-					"auth_result_str", authResponseString,
-					"auth_result", authResponse,
-					"post_restlt_str", postResponseString,
-					"post_restlt", "ERROR:" + e.getMessage());
+			postResponse = new PostMessageResponseBody();
+			postResponse.error = "Parse Error:" + e.getMessage();
+			postResponse.source = postResponseString;
+			return postResponse;
 		}
-
-		return Map.of(
-				"code", code, 
-				"state", state, 
-				"client_id", clientId,
-				"client_secret", clientSecret,
-				"auth_result_str", authResponseString,
-				"auth_result", authResponse,
-				"post_restlt_str", postResponseString,
-				"post_restlt", postResponse);
+		
+		return postResponse;
 	}
 }

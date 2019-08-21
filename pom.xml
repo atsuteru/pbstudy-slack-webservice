@@ -115,5 +115,6 @@
         <jetty.version>9.0.6.v20130930</jetty.version>
         <slack.oauth.clientId>${env.SLACK_OAUTH_CLIENTID}</slack.oauth.clientId>
         <slack.oauth.clientSecret>${env.SLACK_OAUTH_CLIENTSECRET}</slack.oauth.clientSecret>
+        <slack.oauth.postChannel>${env.SLACK_OAUTH_POSTCHANNEL}</slack.oauth.postChannel>
     </properties>
 </project>
