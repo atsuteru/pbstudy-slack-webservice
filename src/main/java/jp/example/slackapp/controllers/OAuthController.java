@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jp.example.slackapp.controllers.models.AccessTokenResponseBody;
-import jp.example.slackapp.controllers.models.PostMessageResponseBody;
+import jp.example.slackapp.controllers.contents.AccessTokenResponseContent;
+import jp.example.slackapp.controllers.contents.PostMessageResponseContent;
 
 @Path("oauth")
 public class OAuthController {
@@ -43,8 +43,8 @@ public class OAuthController {
 				"post_result", postResponse);
 	}
 
-	protected AccessTokenResponseBody getAccessToken(String clientId, String clientSecret, String code) {
-		AccessTokenResponseBody authResponse;
+	protected AccessTokenResponseContent getAccessToken(String clientId, String clientSecret, String code) {
+		AccessTokenResponseContent authResponse;
 
 		String authResponseString;
 		try {
@@ -56,16 +56,16 @@ public class OAuthController {
 					.request().accept("application/json")
 					.get(String.class);
 		} catch (Exception e) {
-			authResponse = new AccessTokenResponseBody();
+			authResponse = new AccessTokenResponseContent();
 			authResponse.error = "Request Error:" + e.getMessage();
 			return authResponse;
 		}
 		
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			authResponse = objectMapper.readValue(authResponseString,  AccessTokenResponseBody.class);
+			authResponse = objectMapper.readValue(authResponseString,  AccessTokenResponseContent.class);
 		} catch (Exception e) {
-			authResponse = new AccessTokenResponseBody();
+			authResponse = new AccessTokenResponseContent();
 			authResponse.error = "Parse Error:" + e.getMessage();
 			authResponse.source = authResponseString;
 			return authResponse;
@@ -74,8 +74,8 @@ public class OAuthController {
 		return authResponse;
 	}
 
-	protected PostMessageResponseBody postMessage(String accessToken, String postChannel, String text) {
-		PostMessageResponseBody postResponse;
+	protected PostMessageResponseContent postMessage(String accessToken, String postChannel, String text) {
+		PostMessageResponseContent postResponse;
 		
 		String postResponseString;
 		try {
@@ -87,16 +87,16 @@ public class OAuthController {
 					.request().accept("application/json")
 					.get(String.class);
 		} catch (Exception e) {
-			postResponse = new PostMessageResponseBody();
+			postResponse = new PostMessageResponseContent();
 			postResponse.error = "Request Error:" + e.getMessage();
 			return postResponse;
 		}
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			postResponse = objectMapper.readValue(postResponseString,  PostMessageResponseBody.class);
+			postResponse = objectMapper.readValue(postResponseString,  PostMessageResponseContent.class);
 		} catch (Exception e) {
-			postResponse = new PostMessageResponseBody();
+			postResponse = new PostMessageResponseContent();
 			postResponse.error = "Parse Error:" + e.getMessage();
 			postResponse.source = postResponseString;
 			return postResponse;

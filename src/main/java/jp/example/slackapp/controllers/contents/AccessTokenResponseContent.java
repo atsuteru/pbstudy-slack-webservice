@@ -1,10 +1,10 @@
-package jp.example.slackapp.controllers.models;
+package jp.example.slackapp.controllers.contents;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class AccessTokenResponseBody {
+public class AccessTokenResponseContent {
 
 	public String ok;
 	
