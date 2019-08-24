@@ -11,6 +11,11 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
 	@Override
 	public Response toResponse(BadRequestException exception) {
 		System.out.println(String.format("%s: %s", exception.getClass().getName(), exception.getMessage()));
+		if (exception.getCause() != null)
+		{
+			System.out.println("Caused by ...");
+			exception.getCause().printStackTrace(System.out);
+		}
 		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
 

@@ -10,10 +10,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jp.example.slackapp.controllers.contents.AccessTokenResponseContent;
 import jp.example.slackapp.controllers.contents.PostMessageResponseContent;
+import jp.example.slackapp.utils.JsonObject;
 
 @Path("oauth")
 public class OAuthController {
@@ -62,9 +61,8 @@ public class OAuthController {
 		}
 		
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			authResponse = objectMapper.readValue(authResponseString,  AccessTokenResponseContent.class);
-		} catch (Exception e) {
+			authResponse = JsonObject.from(authResponseString);
+		} catch (RuntimeException e) {
 			authResponse = new AccessTokenResponseContent();
 			authResponse.error = "Parse Error:" + e.getMessage();
 			authResponse.source = authResponseString;
@@ -93,8 +91,7 @@ public class OAuthController {
 		}
 
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			postResponse = objectMapper.readValue(postResponseString,  PostMessageResponseContent.class);
+			postResponse = JsonObject.from(postResponseString);
 		} catch (Exception e) {
 			postResponse = new PostMessageResponseContent();
 			postResponse.error = "Parse Error:" + e.getMessage();
