@@ -21,14 +21,14 @@ jax-rs(jersey)プロジェクトの作成...
 - [x] Webサービスを公開する - heroku
   https://pbstudy-slack-webservice.herokuapp.com/oauth/redirect?code=1234&state=abc
 
-- [ ] Slackアプリを作成する - OAuthのredirect先にherokuでのslack認証のpathを指定
+- [x] Slackアプリを作成する - OAuthのredirect先にherokuでのslack認証のpathを指定
   Create App - https://api.slack.com/apps
 
-- [ ] Webサービス開発 - redirectを受けたらアクセストークンをメモリ保存＆表示するコードを書く
+- [x] Webサービス開発 - redirectを受けたらアクセストークンをメモリ保存＆表示するコードを書く
 
-- [ ] Slack認証のURLをブラウザで投げる→Webサービスがアクセストークンをメモリ保存＆表示する
+- [x] Slack認証のURLをブラウザで投げる→Webサービスがアクセストークンをメモリ保存＆表示する
 
-- [ ] Webサービス開発 - アクセストークン受信時、Slackにメッセージを投げる
+- [x] Webサービス開発 - アクセストークン受信時、Slackにメッセージを投げる
 
-- [ ] SlackのEventyAPIを使ってみる
+- [x] SlackのEventyAPIを使ってみる
 
