@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import jp.example.slackapp.SlackClient;
 import jp.example.slackapp.controllers.contents.EventAppMentionContent;
 import jp.example.slackapp.controllers.contents.EventCallbackRequestContent;
 import jp.example.slackapp.controllers.contents.EventEnableRequestContent;
@@ -71,6 +72,9 @@ public class EventController {
 
 	protected EventEnableResponseContent receiveAppMention(EventAppMentionContent content) {
 		System.out.println(String.format("Receive App menthion '%s' from user '%s' in channel'%s'", content.event.text, content.event.user, content.event.channel));
+
+		SlackClient.postMessageAsUser(content.event.channel, String.format("<@%s> Hello!!", content.event.user));
+
 		return new EventEnableResponseContent();
 	}
 }

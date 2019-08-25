@@ -9,8 +9,6 @@ public class PostMessageResponseContent {
 	public String ok;
 	
 	public String error;
-	
-	public String source;
 
 	public String channel;
 	

@@ -10,8 +10,6 @@ public class AccessTokenResponseContent {
 	
 	public String error;
 
-	public String source;
-
 	@JsonProperty("access_token")
 	public String accessToken;
 	
