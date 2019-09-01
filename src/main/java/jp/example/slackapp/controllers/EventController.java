@@ -19,14 +19,14 @@ import jp.example.slackapp.BusinessCardGenerator;
 import jp.example.slackapp.SlackClient;
 import jp.example.slackapp.controllers.contents.EventAppMentionContent;
 import jp.example.slackapp.controllers.contents.EventCallbackRequestContent;
-import jp.example.slackapp.controllers.contents.EventEnableRequestContent;
-import jp.example.slackapp.controllers.contents.EventEnableResponseContent;
+import jp.example.slackapp.controllers.contents.EventRequestContent;
+import jp.example.slackapp.controllers.contents.EventResponseContent;
 import jp.example.slackapp.utils.JsonObject;
 
 @Path("event")
 public class EventController {
 
-	protected Map<String, Function<String, EventEnableResponseContent>> _actions = new HashMap<String, Function<String, EventEnableResponseContent>>();
+	protected Map<String, Function<String, EventResponseContent>> _actions = new HashMap<String, Function<String, EventResponseContent>>();
 	
 	protected UriInfo _uriInfo;
 	
@@ -38,7 +38,7 @@ public class EventController {
 		GenerateActions(_actions);
 	}
 	
-	protected void GenerateActions(Map<String, Function<String, EventEnableResponseContent>> consumers) {
+	protected void GenerateActions(Map<String, Function<String, EventResponseContent>> consumers) {
 		_actions.put("url_verification", (jsonContent) -> {return receiveEnable(JsonObject.from(jsonContent));});
 		_actions.put("event_callback", (jsonContent) -> {return receiveCallback(JsonObject.from(jsonContent), jsonContent);});
 		_actions.put("app_mention", (jsonContent) -> {return receiveAppMention(JsonObject.from(jsonContent));});
@@ -47,10 +47,10 @@ public class EventController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public EventEnableResponseContent receive(String jsonContent, @Context UriInfo uriInfo) {
+	public EventResponseContent receive(String jsonContent, @Context UriInfo uriInfo) {
 		_uriInfo = uriInfo;
 
-		EventEnableRequestContent content;
+		EventRequestContent content;
 
 		try {
 			content = JsonObject.from(jsonContent);
@@ -65,11 +65,11 @@ public class EventController {
 		return _actions.get(content.type).apply(jsonContent);
 	}
 
-	protected EventEnableResponseContent receiveEnable(EventEnableRequestContent content) {
-		return new EventEnableResponseContent() {{ challenge = content.challenge; }};
+	protected EventResponseContent receiveEnable(EventRequestContent content) {
+		return new EventResponseContent() {{ challenge = content.challenge; }};
 	}
 
-	protected EventEnableResponseContent receiveCallback(EventCallbackRequestContent content, String jsonContent) {
+	protected EventResponseContent receiveCallback(EventCallbackRequestContent content, String jsonContent) {
 		if (content.event == null) {
 			throw new BadRequestException(String.format("Unsupported event because 'event' is not defined: '%s'", jsonContent));
 		}
@@ -83,7 +83,7 @@ public class EventController {
 	
 	protected static final Pattern REQUEST_GENERATE_BUSINESS_CARD_MESSAGE = Pattern.compile("^.*名刺.*(役割|肩書|肩書き|ロール)[は:=＝：]?(?<role>[^、,。.]+?)[、,。.]?(名前|なまえ|氏名)[は:=＝：](?<name>[^、,。.]+?)?[、,。.]?(会社)[は:=＝：](?<campany>[^、,。.]+?)[、,。.]?$");
 
-	protected EventEnableResponseContent receiveAppMention(EventAppMentionContent content) {
+	protected EventResponseContent receiveAppMention(EventAppMentionContent content) {
 		System.out.println(String.format("Receive App menthion '%s' from user '%s' in channel'%s'", content.event.text, content.event.user, content.event.channel));
 
 		var matcher = REQUEST_GENERATE_BUSINESS_CARD_MESSAGE.matcher(content.event.text);
@@ -91,7 +91,7 @@ public class EventController {
 			SlackClient.postMessageAsUser(
 					content.event.channel, 
 					String.format("<@%s> こんにちは!! 何か依頼がありますか？ 名刺を作成する場合は、「名刺、役割=スタッフ、氏名=月極正太郎、会社=月極駐車場株式会社」のようにご依頼ください。", content.event.user));
-			return new EventEnableResponseContent();
+			return new EventResponseContent();
 		}
 
 		var role = matcher.group("role");
@@ -112,6 +112,6 @@ public class EventController {
 				new ByteArrayInputStream(pdfData), "BusinessCard.pdf", "pdf",
 				"BusinessCard.pdf", "名刺が出来あがりました！マルチカード台紙に印刷してご利用ください♪");
 
-		return new EventEnableResponseContent();
+		return new EventResponseContent();
 	}
 }

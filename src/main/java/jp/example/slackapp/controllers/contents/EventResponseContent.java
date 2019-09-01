@@ -3,7 +3,7 @@ package jp.example.slackapp.controllers.contents;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class EventEnableResponseContent {
+public class EventResponseContent {
 
 	public String token;
 	

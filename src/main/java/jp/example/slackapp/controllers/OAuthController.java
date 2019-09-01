@@ -20,7 +20,7 @@ public class OAuthController {
 	public Map<String, Object> receiveRedirect(@QueryParam("code") String code, @QueryParam("state") String state) {
 		
 		// Collect parameters
-		ResourceBundle res = ResourceBundle.getBundle("slack");
+		var res = ResourceBundle.getBundle("slack");
 		var clientId = res.getString("clientId");
 		var clientSecret = res.getString("clientSecret");
 		var postChannel = res.getString("oauth.postChannel");
