@@ -18,9 +18,11 @@ import jp.example.slackapp.utils.JsonObject;
 
 public class SlackClient {
 
-	protected static final WebTarget SLACK = ClientBuilder.newClient().target("https://slack.com");
+	protected static final WebTarget SLACK = 
+			ClientBuilder.newClient().target("https://slack.com");
 
-	protected static final WebTarget SLACK_UPLOAD = ClientBuilder.newBuilder().register(MultiPartFeature.class).build().target("https://slack.com");
+	protected static final WebTarget SLACK_UPLOAD = 
+			ClientBuilder.newBuilder().register(MultiPartFeature.class).build().target("https://slack.com");
 
 	private static String _accessToken = "";
 	
@@ -66,14 +68,6 @@ public class SlackClient {
 	}
 
 	public static PostMessageResponseContent postMessage(String postChannel, String text) {
-		return postMessage(postChannel, text, false);
-	}
-
-	public static PostMessageResponseContent postMessageAsUser(String postChannel, String text) {
-		return postMessage(postChannel, text, true);
-	}
-
-	protected static PostMessageResponseContent postMessage(String postChannel, String text, boolean asUser) {
 		PostMessageResponseContent postResponse;
 		
 		String postResponseString;
@@ -82,7 +76,6 @@ public class SlackClient {
 					.queryParam("token", _accessToken)
 					.queryParam("channel", postChannel)
 					.queryParam("text", text)
-					.queryParam("as_user", asUser)
 					.request().accept("application/json")
 					.get(String.class);
 		} catch (Exception e) {
