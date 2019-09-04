@@ -28,7 +28,7 @@ public class StatusController {
 		return Map.of("status", true);
 	}
 
-	protected static final Pattern REQUEST_GENERATE_BUSINESS_CARD_MESSAGE = Pattern.compile("^.*名刺.*(役割|肩書|肩書き|ロール)[は:=＝：]?(?<role>[^、,。.]+?)[、,。.]?(名前|なまえ|氏名)[は:=＝：](?<name>[^、,。.]+?)?[、,。.]?(会社)[は:=＝：](?<campany>[^、,。.]+?)[、,。.]?$");
+	protected static final Pattern REQUEST_GENERATE_BUSINESS_CARD_MESSAGE = Pattern.compile("^.*名刺.*(役割|肩書|肩書き|ロール)[は:=＝：]?(?<role>[^、,。.]+?)[、,。.]?(名前|なまえ|氏名)[は:=＝：](?<name>[^、,。.]+?)?[、,。.]?(会社)[は:=＝：](?<company>[^、,。.]+?)[、,。.]?$");
 
 	@Path("/pdf")
 	@GET
@@ -38,16 +38,16 @@ public class StatusController {
 		var matcher = REQUEST_GENERATE_BUSINESS_CARD_MESSAGE.matcher(text);
 		var role = "初代会長";
 		var name = "月極正太郎";
-		var campany = "月極駐車場株式会社";
+		var company = "月極駐車場株式会社";
 		if (matcher.matches()) {
 			role = matcher.group("role");
 			name = matcher.group("name");
-			campany = matcher.group("campany");
+			company = matcher.group("company");
 		}
 		
 		var pdfData = BusinessCardGenerator.Generate(
 				"templates/business_card.mustache.html", 
-				Map.of("role", role, "name", name, "campany", campany), 
+				Map.of("role", role, "name", name, "company", company), 
 				String.format("%s://%s", uriInfo.getBaseUri().getScheme(), uriInfo.getBaseUri().getAuthority()));
 
         StreamingOutput output = new StreamingOutput() {
