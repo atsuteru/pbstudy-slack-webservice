@@ -60,6 +60,7 @@ public class SlackClient {
 					"Get AccessToken was failed!! cause='%s'", authResponseString));
 		}
 
+		authResponse.source = authResponseString;
 		return authResponse;
 	}
 	
