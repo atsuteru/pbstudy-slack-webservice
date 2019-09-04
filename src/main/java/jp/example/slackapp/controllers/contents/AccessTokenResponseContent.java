@@ -20,9 +20,22 @@ public class AccessTokenResponseContent {
 	@JsonProperty("user_id")
 	public String userId;
 	
-	public String teamName;
-	
 	@JsonProperty("team_id")
 	public String teamId;
+	
+	@JsonProperty("team_name")
+	public String teamName;
+
+	public Bot bot;
+
+	@JsonIgnoreProperties(ignoreUnknown=true)
+	public class Bot {
+	
+		@JsonProperty("bot_user_id")
+		public String botUserId;
+		
+		@JsonProperty("bot_access_token")
+		public String botAccessToken;
+	}
 
 }

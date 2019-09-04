@@ -36,10 +36,17 @@ public class OAuthController {
 		}
 		
 		// Set Access token to this service
-		SlackClient.SetAccessToken(authResponse.accessToken);
+		String grantedMessage;
+		if (authResponse.bot != null) {
+			SlackClient.SetAccessToken(authResponse.bot.botAccessToken);
+			grantedMessage = "Access token has been granted. (Bot mode)";
+		} else {
+			SlackClient.SetAccessToken(authResponse.accessToken);
+			grantedMessage = "Access token has been granted. (App mode)";
+		}
 				
 		// POST Message
-		var postResponse = SlackClient.postMessage(postChannel, "Access token has been granted.");
+		var postResponse = SlackClient.postMessage(postChannel, grantedMessage);
 
 		return Map.of(
 				"code", code, 
