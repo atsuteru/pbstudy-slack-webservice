@@ -1,34 +1,17 @@
-- [x] MarkDownエディタが欲しい - Typoraのインストール
+### このリポジトリについて
 
-- [x] Webサービスを作成する - Jessyで。slack認証を行うpathを決めておく
-  OpenJDK入手: openjdk-12.0.2_windows-x64_bin.zip
-  Maven入手: apache-maven-3.6.1-bin.zip
-jax-rs(jersey)プロジェクトの作成...
-  
-  ```dosbatch
-  C:\Users\teruk\Documents>call %MVN_HOME%\bin\mvn archetype:generate ^
-  More? -DarchetypeArtifactId=jersey-heroku-webapp ^
-  More? -DarchetypeGroupId=org.glassfish.jersey.archetypes ^
-  More? -DinteractiveMode=false ^
-  More? -DgroupId=jp.example ^
-  More? -DartifactId=pbstudy-slack-webservice ^
-  More? -Dpackage=jp.example ^
-  More? -DarchetypeVersion=2.29
-  ```
-  
-  https://github.com/atsuteru/pbstudy-slack-webservice
-  
-- [x] Webサービスを公開する - heroku
-  https://pbstudy-slack-webservice.herokuapp.com/oauth/redirect?code=1234&state=abc
+このリポジトリは、2019/9/6に開催された ピープル＆ブレイン☆パートナー勉強会 の発表「Slackに名刺を作ってくれるbotを作ってみた」で紹介されたデモンストレーションで使用されたコードを含みます。
 
-- [x] Slackアプリを作成する - OAuthのredirect先にherokuでのslack認証のpathを指定
-  Create App - https://api.slack.com/apps
+コードの構造は、その発表資料で紹介しています。
 
-- [x] Webサービス開発 - redirectを受けたらアクセストークンをメモリ保存＆表示するコードを書く
+[Slackに名刺を作ってくれるbotを作ってみた](https://prezi.com/view/SPIWONviydjZP39QQCNO/)
 
-- [x] Slack認証のURLをブラウザで投げる→Webサービスがアクセストークンをメモリ保存＆表示する
+### 補足
 
-- [x] Webサービス開発 - アクセストークン受信時、Slackにメッセージを投げる
+このコードは、open-jdk-12, Jersey を利用して作成された、Slack eb API, Slack Event API と接続するためのサンプルコードの一つです。
 
-- [x] SlackのEventyAPIを使ってみる
+### 謝辞
 
+このコードは、HTMLに値を埋め込む手段として [jersey-mvc-mustache](https://mvnrepository.com/artifact/org.glassfish.jersey.ext/jersey-mvc-mustache) を利用しています。
+
+このコードは、PDFを生成する手段として [flying-saucer-pdf-itext5](https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf-itext5) を利用しています。
