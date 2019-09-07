@@ -60,6 +60,12 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <version>2.4</version>
+		    <scope>compile</scope> <!-- If set to "provided", SecurityExcepion will occur when the status is changed to "unidling" on heroku. -->
+		</dependency>
         <!-- For generate Business-card START -->
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
@@ -70,18 +76,7 @@
             <artifactId>flying-saucer-pdf-itext5</artifactId>
             <version>9.1.18</version>
         </dependency>
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext-asian</artifactId>
-            <version>5.2.0</version>
-        </dependency>
         <!-- For generate Business-card END -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>compile</scope>
-		</dependency>
     </dependencies>
 
     <build>
