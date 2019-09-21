@@ -11,13 +11,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
-import jp.example.slackapp.BusinessCardGenerator;
+import jp.example.businesscard.BusinessCardGeneratorClient;
 
 @Path("status")
 public class StatusController {
@@ -32,8 +30,8 @@ public class StatusController {
 
 	@Path("/pdf")
 	@GET
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getPdf(@Context UriInfo uriInfo, @QueryParam("text") String text) {
+	@Produces("application/pdf")
+	public StreamingOutput getPdf(@Context UriInfo uriInfo, @QueryParam("text") String text) {
 
 		var matcher = REQUEST_GENERATE_BUSINESS_CARD_MESSAGE.matcher(text);
 		var role = "初代会長";
@@ -45,12 +43,11 @@ public class StatusController {
 			company = matcher.group("company");
 		}
 		
-		var pdfData = BusinessCardGenerator.Generate(
+		var pdfData = BusinessCardGeneratorClient.generate(
 				"templates/business_card.mustache.html", 
-				Map.of("role", role, "name", name, "company", company), 
-				String.format("%s://%s", uriInfo.getBaseUri().getScheme(), uriInfo.getBaseUri().getAuthority()));
+				Map.of("role", role, "name", name, "company", company));
 
-        StreamingOutput output = new StreamingOutput() {
+        return new StreamingOutput() {
             @Override
             public void write(OutputStream out)
                     throws IOException, WebApplicationException {
@@ -58,10 +55,5 @@ public class StatusController {
                 out.flush();
             }
         };
-        return Response.ok(output)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=BusinessCard.pdf")
-                .build();
-	
 	}
 }

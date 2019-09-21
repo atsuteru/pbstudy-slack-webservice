@@ -18,7 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import jp.example.slackapp.BusinessCardGenerator;
+import jp.example.businesscard.BusinessCardGeneratorClient;
 import jp.example.slackapp.SlackClient;
 import jp.example.slackapp.controllers.contents.EventAppMentionContent;
 import jp.example.slackapp.controllers.contents.EventCallbackRequestContent;
@@ -114,10 +114,9 @@ public class EventController {
 	    CompletableFuture
 	    	.supplyAsync(() -> 
 		    {
-				byte[] pdfData = BusinessCardGenerator.Generate(
+				byte[] pdfData = BusinessCardGeneratorClient.generate(
 						"templates/business_card.mustache.html", 
-						Map.of("role", role, "name", name, "company", company), 
-						getServletUrl());
+						Map.of("role", role, "name", name, "company", company));
 				
 				return SlackClient.uploadFile(
 						content.event.channel, 
